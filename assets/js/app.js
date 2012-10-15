@@ -43,7 +43,7 @@ function SimulatorController($scope,socket){
   $scope.start = function(){
     $scope.showConfig = false
     $scope.instances = new Array($scope.instanceCount);
-    socket.emit('start_simulation',{instances:$scope.instanceCount})
+    socket.emit('start_simulation',{definition:$scope.definitions,instances:$scope.instanceCount})
   }
   $scope.delete = function(index){
     if($scope.definitions[index]){
