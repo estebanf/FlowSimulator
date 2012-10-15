@@ -1,0 +1,96 @@
+extends layout
+
+block content
+  .container(ng-controller='SimulatorController')
+    h1 Simple flow simulator
+    .row(ng-show='results')
+      .span12
+        .alert
+          h3 Last run results
+          p Total instances: {{results.total_instances}}
+          p Longest: Instance \#{{results.longest_instance.instance}}
+          p Shortest: Instance \#{{results.shortest_instance.instance}}
+          p Average duration: {{results.average_duration}} ms
+    .row
+      .span12
+        h3 Current flow definition
+        table.table.table-bordered.table-hover.table-condensed
+          thead
+            th
+            th Name
+            th Std Duration
+            th Min Duration
+            th Max Duration
+            th Prob Duration Std
+            th Loop
+            th Loop Prob
+            th Loop Target
+            th
+            th
+          tr(ng-repeat='definition in definitions')
+            td {{$index}}
+            td {{definition.name}}
+            td {{definition.setup.standard_duration}}
+            td {{definition.setup.min_duration}}
+            td {{definition.setup.max_duration}}
+            td {{definition.setup.prob_standard_duration}}
+            td {{definition.setup.loop}}
+            td {{definition.setup.prob_loop}}
+            td {{definition.setup.loop_target}}
+            td
+              a.btn(ng-click='edit_definition($index)') Edit
+            td
+              a.btn(ng-click='delete($index)') Delete
+    .row.well(ng-show='showConfig')
+      .span12
+        h3 {{currentAction}}                 
+        form.form
+          .row
+            .span4              
+                label.control-label(for='name') Name
+                input.span3(type='text',name='name',ng-model='current_definition.name')
+            .span4            
+                label.control-label(for='prob_standard_duration') Prob Standard Duration
+                input.span3(type='text',name='prob_standard_duration',ng-model='current_definition.setup.prob_standard_duration')
+          .row
+            .span4              
+                label.control-label(for='standard_duration') Standard Duration
+                input.span3(type='text',name='standard_duration',ng-model='current_definition.setup.standard_duration')
+            .span4            
+                label.control-label(for='min_duration') Min Duration
+                input.span3(type='text',name='min_duration',ng-model='current_definition.setup.min_duration')
+            .span4              
+                label.control-label(for='max_duration') Max Duration
+                input.span3(type='text',name='max_duration',ng-model='current_definition.setup.max_duration')
+          .row
+            .span4              
+                label.checkbox
+                  input(type='checkbox',name='loop',ng-model='current_definition.setup.loop', value='true') 
+                  | Loop
+            .span4(ng-show='current_definition.setup.loop')           
+                label.control-label(for='prob_loop') Prob Loop
+                input.span3(type='text',name='prob_loop',ng-model='current_definition.setup.prob_loop')
+            .span4(ng-show='current_definition.setup.loop')           
+                label.control-label(for='loop_target') Loop target
+                input.span3(type='text',name='loop_target',ng-model='current_definition.setup.loop_target')
+          .row
+            .span1.offset10
+              a.btn(ng-click='done()') Done
+    .row
+      .span12
+        h3 Run the simulation
+        .row(ng-show='showConfig')
+          .span4
+            form(ng-submit='start()')
+              .input-append
+                input.span3(type="text",placeholder='Number of instances',ng-model='instanceCount')
+                button.btn(type="submit") Start
+        .row.well(ng-hide='showConfig', ng-repeat="instance in instances")
+          .span12
+            | Instance \#{{instance.instance}} ended step "{{instance.step}}" in {{instance.duration}} ms
+      //- .span4
+      //-   p Current status is {{status}}
+      //-   form(ng-submit='start()')
+      //-     input(type='submit', value='start simulation')
+      //-   p(ng-repeat='instance in instances')
+      //-     {{instance.step}}

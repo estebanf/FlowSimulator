@@ -1,0 +1,13 @@
+doctype 5
+html(ng-app="FlowSimulator")
+  head
+    title Flow Simulator
+    script(src='/socket.io/socket.io.js')
+    != js('jquery-latest')
+    != js('angular.min')
+    != js('angular-resource.min')
+    != js('bootstrap.min')
+    != js('app')
+    != css('bootstrap.min')
+  body
+    block content
